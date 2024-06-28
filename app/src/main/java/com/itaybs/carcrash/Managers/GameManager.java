@@ -10,7 +10,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.LinearLayoutCompat;
 
+import com.itaybs.carcrash.Enums.GameMode;
 import com.itaybs.carcrash.GameActivity;
+import com.itaybs.carcrash.Interfaces.GameOverCallback;
 import com.itaybs.carcrash.Interfaces.MoveCallback;
 import com.itaybs.carcrash.R;
 import com.itaybs.carcrash.Utilities.MoveDetector;
@@ -20,26 +22,26 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameManager {
-    private Context context;
-    private SoundPlayer soundPlayer;
-    private SoundPlayer soundEffectsPlayer;
+    private final Context context;
+    private final SoundPlayer soundPlayer;
+    private final SoundPlayer soundEffectsPlayer;
     private MoveDetector moveDetector;
-    private GridLayout gridLayout;
-    private LinearLayoutCompat heartsLayout;
-    private ScoreManager scoreManager;
-    private CarManager carManager;
-    private ObstaclesManager obstaclesManager;
+    private final GridLayout gridLayout;
+    private final LinearLayoutCompat heartsLayout;
+    private final ScoreManager scoreManager;
+    private final CarManager carManager;
+    private final ObstaclesManager obstaclesManager;
+    private final GameOverCallback gameOverCallback;
 
     private int heartsLeft = 3;
     private static long delay = 1000L;
     private static long updatedDelay = 1000L;
-    private long updateDelayTimestamp = 0L;
     private Timer timer;
     private TimerTask currentTask;
     private boolean timerOn = false;
 
     public GameManager(Context context, GridLayout gridLayout, LinearLayoutCompat heartsLayout, ScoreManager scoreManager,
-                       CarManager carManager, ObstaclesManager obstaclesManager) {
+                       CarManager carManager, ObstaclesManager obstaclesManager, GameOverCallback gameOverCallback, GameMode gameMode) {
         this.context = context;
         this.gridLayout = gridLayout;
         this.heartsLayout = heartsLayout;
@@ -51,7 +53,9 @@ public class GameManager {
         this.moveDetector = new MoveDetector(context, new MoveCallback() {
             @Override
             public void moveX(float x) {
-                moveCar(x > 0);
+                if (gameMode != GameMode.BUTTONS) {
+                    moveCar(x > 0);
+                }
             }
 
             @Override
@@ -67,6 +71,7 @@ public class GameManager {
                 }
             }
         });
+        this.gameOverCallback = gameOverCallback;
     }
 
     public void initializeGame() {
@@ -168,21 +173,20 @@ public class GameManager {
     }
 
     public void checkCollision() {
-        if (obstaclesManager.checkCollision(carManager.getCurrentRow(), carManager.getCurrentLane()) && 1 == 2) {
+        if (obstaclesManager.checkCollision(carManager.getCurrentRow(), carManager.getCurrentLane())) {
             soundEffectsPlayer.playSound(R.raw.car_crash, false);
             heartsLeft--;
 
             if (heartsLeft == 0) {
-                heartsLeft = 3;
                 toastAndVibrate("Game Over!");
-                scoreManager.resetScore();
+                this.gameOverCallback.gameOver();
             } else {
                 toastAndVibrate("Collision Detected!");
             }
 
             updateHearts();
             carManager.resetCarPosition();
-            obstaclesManager.resetFirstRow();
+            obstaclesManager.reset();
         }
     }
 

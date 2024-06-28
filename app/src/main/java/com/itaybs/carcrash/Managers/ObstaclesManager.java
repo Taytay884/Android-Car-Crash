@@ -68,7 +68,9 @@ public class ObstaclesManager {
         return obstacles[currentRow][currentLane] == 1;
     }
 
-    public void resetFirstRow() {
-        Arrays.fill(obstacles[0], 0);
+    public void reset() {
+        for (int i = 0; i <= rowLastIndex; i++) {
+            Arrays.fill(obstacles[i], 0);
+        }
     }
 }

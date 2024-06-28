@@ -1,14 +1,16 @@
 package com.itaybs.carcrash;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
+import com.itaybs.carcrash.Enums.GameMode;
 import com.itaybs.carcrash.Managers.CarManager;
 import com.itaybs.carcrash.Managers.GameManager;
 import com.itaybs.carcrash.Managers.ObstaclesManager;
@@ -35,6 +37,9 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        Intent intent = getIntent();
+        GameMode gameMode = (GameMode) intent.getSerializableExtra("GAME_MODE");
+
         gridLayout = findViewById(R.id.gridLayout);
         heartsLayout = findViewById(R.id.heartsLayout);
         scoreTextView = findViewById(R.id.score);
@@ -45,15 +50,26 @@ public class GameActivity extends AppCompatActivity {
         carManager = new CarManager(colLastIndex, rowLastIndex, car);
         obstaclesManager = new ObstaclesManager(obstacles, columnWidth, rowHeight, rowLastIndex, colLastIndex);
         scoreManager = new ScoreManager(scoreTextView);
-        gameManager = new GameManager(this, gridLayout, heartsLayout, scoreManager, carManager, obstaclesManager);
+        gameManager = new GameManager(this, gridLayout, heartsLayout, scoreManager, carManager, obstaclesManager, () -> {
+            Intent switchToIntent = new Intent(GameActivity.this, MainActivity.class);
+            switchToIntent.putExtra("SCORE", scoreManager.getScore());
+            switchToIntent.putExtra("GAME_MODE", gameMode);
+            switchToIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(switchToIntent);
+            finish();
+        }, gameMode);
 
         gameManager.initializeGame();
+        MaterialButton btnRight = findViewById(R.id.btnRight);
+        MaterialButton btnLeft = findViewById(R.id.btnLeft);
 
-        Button btnRight = findViewById(R.id.btnRight);
-        btnRight.setOnClickListener(v -> gameManager.moveCar(true));
-
-        Button btnLeft = findViewById(R.id.btnLeft);
-        btnLeft.setOnClickListener(v -> gameManager.moveCar(false));
+        if (gameMode == GameMode.SENSOR) {
+            btnRight.setVisibility(MaterialButton.GONE);
+            btnLeft.setVisibility(MaterialButton.GONE);
+        } else {
+            btnRight.setOnClickListener(v -> gameManager.moveCar(true));
+            btnLeft.setOnClickListener(v -> gameManager.moveCar(false));
+        }
     }
 
     @Override

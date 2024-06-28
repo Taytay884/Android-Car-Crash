@@ -2,4 +2,10 @@
     <string name="app_name">24B-11345A-L02-03</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="sensor">Sensor</string>
+    <string name="buttons">Buttons</string>
+    <string name="both">Both</string>
+    <string name="play">Play</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="previous_score">Last score: %d</string>
 </resources>
