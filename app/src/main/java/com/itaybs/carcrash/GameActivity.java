@@ -14,7 +14,7 @@ import com.itaybs.carcrash.Enums.GameMode;
 import com.itaybs.carcrash.Managers.CarManager;
 import com.itaybs.carcrash.Managers.GameManager;
 import com.itaybs.carcrash.Managers.ObstaclesManager;
-import com.itaybs.carcrash.Managers.ScoreManager;
+import com.itaybs.carcrash.Managers.GameScoreManager;
 
 public class GameActivity extends AppCompatActivity {
     private GridLayout gridLayout;
@@ -23,7 +23,7 @@ public class GameActivity extends AppCompatActivity {
     private GameManager gameManager;
     private CarManager carManager;
     private ObstaclesManager obstaclesManager;
-    private ScoreManager scoreManager;
+    private GameScoreManager gameScoreManager;
     private ImageView car;
 
     private int[][] obstacles = new int[9][5];
@@ -49,10 +49,10 @@ public class GameActivity extends AppCompatActivity {
 
         carManager = new CarManager(colLastIndex, rowLastIndex, car);
         obstaclesManager = new ObstaclesManager(obstacles, columnWidth, rowHeight, rowLastIndex, colLastIndex);
-        scoreManager = new ScoreManager(scoreTextView);
-        gameManager = new GameManager(this, gridLayout, heartsLayout, scoreManager, carManager, obstaclesManager, () -> {
+        gameScoreManager = new GameScoreManager(scoreTextView);
+        gameManager = new GameManager(this, gridLayout, heartsLayout, gameScoreManager, carManager, obstaclesManager, () -> {
             Intent switchToIntent = new Intent(GameActivity.this, MainActivity.class);
-            switchToIntent.putExtra("SCORE", scoreManager.getScore());
+            switchToIntent.putExtra("SCORE", gameScoreManager.getScore());
             switchToIntent.putExtra("GAME_MODE", gameMode);
             switchToIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(switchToIntent);

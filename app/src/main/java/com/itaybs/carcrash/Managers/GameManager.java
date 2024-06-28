@@ -28,7 +28,7 @@ public class GameManager {
     private MoveDetector moveDetector;
     private final GridLayout gridLayout;
     private final LinearLayoutCompat heartsLayout;
-    private final ScoreManager scoreManager;
+    private final GameScoreManager gameScoreManager;
     private final CarManager carManager;
     private final ObstaclesManager obstaclesManager;
     private final GameOverCallback gameOverCallback;
@@ -40,12 +40,12 @@ public class GameManager {
     private TimerTask currentTask;
     private boolean timerOn = false;
 
-    public GameManager(Context context, GridLayout gridLayout, LinearLayoutCompat heartsLayout, ScoreManager scoreManager,
+    public GameManager(Context context, GridLayout gridLayout, LinearLayoutCompat heartsLayout, GameScoreManager gameScoreManager,
                        CarManager carManager, ObstaclesManager obstaclesManager, GameOverCallback gameOverCallback, GameMode gameMode) {
         this.context = context;
         this.gridLayout = gridLayout;
         this.heartsLayout = heartsLayout;
-        this.scoreManager = scoreManager;
+        this.gameScoreManager = gameScoreManager;
         this.carManager = carManager;
         this.obstaclesManager = obstaclesManager;
         this.soundPlayer = new SoundPlayer(context);
@@ -78,7 +78,7 @@ public class GameManager {
         updateHearts();
         obstaclesManager.initializeObstacles(gridLayout, context);
         carManager.updateCarPosition(gridLayout, context);
-        scoreManager.resetScore();
+        gameScoreManager.resetScore();
         startGameTimer();
     }
 
@@ -155,7 +155,7 @@ public class GameManager {
                     obstaclesManager.initializeObstacles(gridLayout, context);
                     carManager.updateCarPosition(gridLayout, context);
                     checkCollision();
-                    scoreManager.addScore(1); // Increment score as an example
+                    gameScoreManager.addScore(1); // Increment score as an example
                     if (updatedDelay != delay) {
                         delay = updatedDelay;
                         updateGameTimer();

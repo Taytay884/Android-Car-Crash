@@ -11,6 +11,10 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.itaybs.carcrash.Enums.GameMode;
+import com.itaybs.carcrash.Managers.ScoreManager;
+import com.itaybs.carcrash.Utilities.ScoreEntry;
+
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,10 +22,14 @@ public class MainActivity extends AppCompatActivity {
     private MaterialRadioButton radioSensor, radioButtons, radioBoth;
     private MaterialButton buttonPlay, buttonLeaderboard;
     private MaterialTextView previousScore;
+    private ScoreManager scoreManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        scoreManager = new ScoreManager(this);
+
         Intent intent = getIntent();
         Integer score = (Integer) intent.getSerializableExtra("SCORE");
+
         GameMode gameMode = (GameMode) intent.getSerializableExtra("GAME_MODE");
         if (gameMode == null) {
             gameMode = GameMode.BOTH;
@@ -47,34 +55,28 @@ public class MainActivity extends AppCompatActivity {
             previousScore.setVisibility(View.VISIBLE);
             String scoreMessage = getString(R.string.previous_score, score);
             previousScore.setText(scoreMessage);
+            scoreManager.saveScoreEntry(new ScoreEntry(new Date(), score));
         }
 
-        buttonPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedId = radioGroup.getCheckedRadioButtonId();
-                GameMode gameMode = GameMode.BOTH;
-                if (selectedId == radioSensor.getId()) {
-                    gameMode = GameMode.SENSOR;
-                } else if (selectedId == radioButtons.getId()) {
-                    gameMode = GameMode.BUTTONS;
-                } else if (selectedId == radioBoth.getId()) {
-                    gameMode = GameMode.BOTH;
-                }
-
-                Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                intent.putExtra("GAME_MODE", gameMode);
-                startActivity(intent);
+        buttonPlay.setOnClickListener(v -> {
+            int selectedId = radioGroup.getCheckedRadioButtonId();
+            GameMode gameMode1 = GameMode.BOTH;
+            if (selectedId == radioSensor.getId()) {
+                gameMode1 = GameMode.SENSOR;
+            } else if (selectedId == radioButtons.getId()) {
+                gameMode1 = GameMode.BUTTONS;
+            } else if (selectedId == radioBoth.getId()) {
+                gameMode1 = GameMode.BOTH;
             }
+
+            Intent intent12 = new Intent(MainActivity.this, GameActivity.class);
+            intent12.putExtra("GAME_MODE", gameMode1);
+            startActivity(intent12);
         });
 
-        buttonLeaderboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to LeaderboardActivity
-                // Intent intent = new Intent(MainActivity.this, LeaderboardActivity.class);
-                // startActivity(intent);
-            }
+        buttonLeaderboard.setOnClickListener(v -> {
+             Intent intent1 = new Intent(MainActivity.this, LeaderboardActivity.class);
+             startActivity(intent1);
         });
     }
 }

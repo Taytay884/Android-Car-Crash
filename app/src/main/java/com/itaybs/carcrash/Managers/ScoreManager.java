@@ -1,36 +1,49 @@
 package com.itaybs.carcrash.Managers;
 
-import com.google.android.material.textview.MaterialTextView;
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.itaybs.carcrash.Utilities.ScoreEntry;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScoreManager {
-    private int score;
-    private MaterialTextView scoreTextView;
+    private static final String PREF_NAME = "score_prefs";
+    private static final String KEY_SCORES = "scores";
 
-    public ScoreManager(MaterialTextView scoreTextView) {
-        this.scoreTextView = scoreTextView;
-        this.score = 0;
-        updateScoreTextView();
+    private SharedPreferences sharedPreferences;
+    private Gson gson;
+
+    public ScoreManager(Context context) {
+        sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        gson = new Gson();
     }
 
-    public int getScore() {
-        return score;
+    // Save a new score entry
+    public void saveScoreEntry(ScoreEntry scoreEntry) {
+        List<ScoreEntry> scoreList = getScoreEntries();
+        scoreList.add(scoreEntry);
+
+        String scoresJson = gson.toJson(scoreList);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_SCORES, scoresJson);
+        editor.apply();
     }
 
-    public void addScore(int points) {
-        this.score += points;
-        updateScoreTextView();
-    }
+    // Retrieve all score entries
+    public List<ScoreEntry> getScoreEntries() {
+        String scoresJson = sharedPreferences.getString(KEY_SCORES, null);
+        Type type = new TypeToken<List<ScoreEntry>>() {}.getType();
 
-    public void resetScore() {
-        this.score = 0;
-        updateScoreTextView();
-    }
+        if (scoresJson == null) {
+            return new ArrayList<>();
+        }
 
-    private void updateScoreTextView() {
-        String scoreTxt = "000";
-        if (score < 10) scoreTxt = "00" + score;
-        else if (score < 100) scoreTxt = "0" + score;
-        else scoreTxt = "" + score;
-        scoreTextView.setText(scoreTxt);
+        return gson.fromJson(scoresJson, type);
     }
 }
