@@ -9,22 +9,47 @@
     tools:context=".GameActivity">
 
     <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/heartsLayout"
-        android:orientation="horizontal"
-        android:gravity="start"
-        android:layout_width="@dimen/hearts_width"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/hearts_height"
+        android:layout_marginHorizontal="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
         android:translationZ="1dp"
-        android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginTop="@dimen/default_margin">
+        >
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/heartsLayout"
+            android:orientation="horizontal"
+            android:gravity="start"
+            android:layout_width="@dimen/hearts_width"
+            android:layout_height="@dimen/hearts_height"
+            android:translationZ="1dp"
+            >
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="@dimen/hearts_height"
+            android:layout_weight="1" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/score_size"
+            tools:text="000"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnCount="3"
-        android:rowCount="7">
+        android:columnCount="5"
+        android:rowCount="9">
     </GridLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
