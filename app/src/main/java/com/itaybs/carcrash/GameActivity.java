@@ -16,20 +16,14 @@ import com.itaybs.carcrash.Managers.GameManager;
 import com.itaybs.carcrash.Managers.ObstaclesManager;
 import com.itaybs.carcrash.Managers.GameScoreManager;
 
-public class GameActivity extends AppCompatActivity {
-    private GridLayout gridLayout;
-    private LinearLayoutCompat heartsLayout;
-    private MaterialTextView scoreTextView;
-    private GameManager gameManager;
-    private CarManager carManager;
-    private ObstaclesManager obstaclesManager;
-    private GameScoreManager gameScoreManager;
-    private ImageView car;
 
-    private int[][] obstacles = new int[9][5];
+public class GameActivity extends AppCompatActivity {
+    private GameManager gameManager;
+    private GameScoreManager gameScoreManager;
+    private final int OBSTACLES_ROWS = 9;
+    private final int OBSTACLES_COLUMNS = 5;
+    private final int[][] obstacles = new int[OBSTACLES_ROWS][OBSTACLES_COLUMNS];
     private final int columnWidth = obstacles[0].length;
-    private final int rowHeight = obstacles.length + 1;
-    private final int rowLastIndex = obstacles.length - 1;
     private final int colLastIndex = obstacles[0].length - 1;
 
     @Override
@@ -40,15 +34,17 @@ public class GameActivity extends AppCompatActivity {
         Intent intent = getIntent();
         GameMode gameMode = (GameMode) intent.getSerializableExtra("GAME_MODE");
 
-        gridLayout = findViewById(R.id.gridLayout);
-        heartsLayout = findViewById(R.id.heartsLayout);
-        scoreTextView = findViewById(R.id.score);
+        GridLayout gridLayout = findViewById(R.id.gridLayout);
+        LinearLayoutCompat heartsLayout = findViewById(R.id.heartsLayout);
+        MaterialTextView scoreTextView = findViewById(R.id.score);
 
-        car = new ImageView(this);
+        ImageView car = new ImageView(this);
         car.setImageResource(R.drawable.car); // Set car image
 
-        carManager = new CarManager(colLastIndex, rowLastIndex, car);
-        obstaclesManager = new ObstaclesManager(obstacles, columnWidth, rowHeight, rowLastIndex, colLastIndex);
+        int rowLastIndex = OBSTACLES_COLUMNS - 1;
+        int rowHeight = OBSTACLES_ROWS + 1;
+        CarManager carManager = new CarManager(colLastIndex, rowLastIndex, car);
+        ObstaclesManager obstaclesManager = new ObstaclesManager(obstacles, columnWidth, rowHeight, rowLastIndex, colLastIndex);
         gameScoreManager = new GameScoreManager(scoreTextView);
         gameManager = new GameManager(this, gridLayout, heartsLayout, gameScoreManager, carManager, obstaclesManager, () -> {
             Intent switchToIntent = new Intent(GameActivity.this, MainActivity.class);
