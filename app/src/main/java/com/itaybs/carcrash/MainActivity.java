@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
@@ -12,19 +13,25 @@ import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.itaybs.carcrash.Enums.GameMode;
 import com.itaybs.carcrash.Managers.ScoreManager;
+import com.itaybs.carcrash.Managers.LocationManager;
 import com.itaybs.carcrash.Utilities.ScoreEntry;
 
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-
+    private LocationManager locationManager;
     private RadioGroup radioGroup;
     private MaterialRadioButton radioSensor, radioButtons, radioBoth;
     private MaterialButton buttonPlay, buttonLeaderboard;
     private MaterialTextView previousScore;
     private ScoreManager scoreManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        locationManager = new LocationManager(this);
         scoreManager = new ScoreManager(this);
 
         Intent intent = getIntent();
@@ -34,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
         if (gameMode == null) {
             gameMode = GameMode.BOTH;
         }
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         radioGroup = findViewById(R.id.radioGroup);
         radioSensor = findViewById(R.id.radioSensor);
@@ -55,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
             previousScore.setVisibility(View.VISIBLE);
             String scoreMessage = getString(R.string.previous_score, score);
             previousScore.setText(scoreMessage);
-            scoreManager.saveScoreEntry(new ScoreEntry(new Date(), score));
+            ScoreEntry scoreEntry = new ScoreEntry(new Date(), score);
+            requestLocationAndSaveScore(scoreEntry);
         }
 
         buttonPlay.setOnClickListener(v -> {
@@ -69,14 +74,37 @@ public class MainActivity extends AppCompatActivity {
                 gameMode1 = GameMode.BOTH;
             }
 
-            Intent intent12 = new Intent(MainActivity.this, GameActivity.class);
-            intent12.putExtra("GAME_MODE", gameMode1);
-            startActivity(intent12);
+            Intent intent1 = new Intent(MainActivity.this, GameActivity.class);
+            intent1.putExtra("GAME_MODE", gameMode1);
+            startActivity(intent1);
         });
 
         buttonLeaderboard.setOnClickListener(v -> {
-             Intent intent1 = new Intent(MainActivity.this, LeaderboardActivity.class);
-             startActivity(intent1);
+            Intent intent12 = new Intent(MainActivity.this, LeaderboardActivity.class);
+            startActivity(intent12);
         });
+    }
+
+    private void requestLocationAndSaveScore(ScoreEntry scoreEntry) {
+        locationManager.requestLocation(new LocationManager.LocationCallback() {
+            @Override
+            public void onLocationResult(double latitude, double longitude) {
+                scoreEntry.setLatitude(latitude);
+                scoreEntry.setLongitude(longitude);
+                scoreManager.saveScoreEntry(scoreEntry);
+            }
+
+            @Override
+            public void onLocationError(String errorMessage) {
+                // Handle location error here if needed
+                scoreManager.saveScoreEntry(scoreEntry); // Save entry even if location isn't available
+            }
+        });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        locationManager.onRequestPermissionsResult(requestCode, grantResults);
     }
 }

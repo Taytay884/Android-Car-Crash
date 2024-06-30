@@ -41,7 +41,7 @@ public class GameActivity extends AppCompatActivity {
         ImageView car = new ImageView(this);
         car.setImageResource(R.drawable.car); // Set car image
 
-        int rowLastIndex = OBSTACLES_COLUMNS - 1;
+        int rowLastIndex = OBSTACLES_ROWS - 1;
         int rowHeight = OBSTACLES_ROWS + 1;
         CarManager carManager = new CarManager(colLastIndex, rowLastIndex, car);
         ObstaclesManager obstaclesManager = new ObstaclesManager(obstacles, columnWidth, rowHeight, rowLastIndex, colLastIndex);

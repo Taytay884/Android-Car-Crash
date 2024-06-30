@@ -25,11 +25,15 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
     public static class ScoreViewHolder extends RecyclerView.ViewHolder {
         public TextView dateTextView;
         public TextView scoreTextView;
+        public TextView latitudeTextView;
+        public TextView longitudeTextView;
 
         public ScoreViewHolder(View itemView) {
             super(itemView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
             scoreTextView = itemView.findViewById(R.id.scoreTextView);
+            latitudeTextView = itemView.findViewById(R.id.latitudeTextView);
+            longitudeTextView = itemView.findViewById(R.id.longitudeTextView);
         }
     }
 
@@ -47,6 +51,8 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         ScoreEntry score = scoreList.get(position);
         holder.dateTextView.setText(score.getDate().toString());
         holder.scoreTextView.setText(String.valueOf(score.getScore()));
+        holder.latitudeTextView.setText(String.valueOf(score.getLatitude()));
+        holder.longitudeTextView.setText(String.valueOf(score.getLongitude()));
     }
 
     @Override

@@ -23,7 +23,6 @@ public class MoveDetector {
                     moveCallback.moveX(x);
                 }
             }
-            System.out.println(y + ", " + z);
             if (z < -3 || z > 8) {
                 if (moveCallback != null) {
                     moveCallback.moveZ(z);
