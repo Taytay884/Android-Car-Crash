@@ -14,6 +14,7 @@ import com.itaybs.carcrash.R;
 import com.itaybs.carcrash.Utilities.ScoreAdapter;
 import com.itaybs.carcrash.Utilities.ScoreEntry;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -45,11 +46,19 @@ public class LeaderboardFragment extends Fragment {
 
         // If no scores are stored, populate with sample data
         if (scoreList.isEmpty()) {
-            ScoreEntry score1 = new ScoreEntry(new Date(), 500);
+            ScoreEntry score1 = new ScoreEntry(new Date(), 9999);
             score1.setLatitude(31.4117257);
             score1.setLongitude(35.0818155);
             scoreList.add(score1);
         }
+
+        // Sort the score list in descending order
+        scoreList.sort(new Comparator<ScoreEntry>() {
+            @Override
+            public int compare(ScoreEntry o1, ScoreEntry o2) {
+                return Integer.compare(o2.getScore(), o1.getScore());
+            }
+        });
 
         // Create and set adapter
         adapter = new ScoreAdapter(scoreList, (latitude, longitude) -> {

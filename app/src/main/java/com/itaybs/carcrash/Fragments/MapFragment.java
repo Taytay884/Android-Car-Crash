@@ -14,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.itaybs.carcrash.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -51,6 +52,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (googleMap != null) {
             LatLng location = new LatLng(latitude, longitude);
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+
+            // Clear all existing markers
+            googleMap.clear();
+
+            // Add a marker at the specified location
+            googleMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .title("The location you made this score!")); // You can customize the title or other options
         }
     }
 }

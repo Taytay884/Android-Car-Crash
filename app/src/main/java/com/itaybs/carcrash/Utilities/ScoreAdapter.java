@@ -17,6 +17,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
 
     private List<ScoreEntry> scoreList;
     private OnScoreClickListener onScoreClickListener;
+    private int selectedPosition = -1; // To keep track of the selected item
 
     // Constructor to initialize with a list of scores and a click listener
     public ScoreAdapter(List<ScoreEntry> scoreList, OnScoreClickListener onScoreClickListener) {
@@ -52,10 +53,18 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
         holder.dateTextView.setText(dateFormat.format(score.getDate()));
         holder.scoreTextView.setText(String.valueOf(score.getScore()));
 
+        // Highlight the selected item
+        holder.itemView.setBackgroundColor(position == selectedPosition ?
+                holder.itemView.getResources().getColor(R.color.selected_item_color) :
+                holder.itemView.getResources().getColor(R.color.default_item_color));
+
         // Set click listener for item
         holder.itemView.setOnClickListener(v -> {
             if (onScoreClickListener != null) {
                 onScoreClickListener.onScoreClick(score.getLatitude(), score.getLongitude());
+                notifyItemChanged(selectedPosition); // Unselect previous item
+                selectedPosition = holder.getAdapterPosition(); // Select new item
+                notifyItemChanged(selectedPosition); // Highlight new item
             }
         });
     }
