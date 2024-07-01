@@ -10,30 +10,29 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.itaybs.carcrash.R;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder> {
 
     private List<ScoreEntry> scoreList;
+    private OnScoreClickListener onScoreClickListener;
 
-    // Constructor to initialize with a list of scores
-    public ScoreAdapter(List<ScoreEntry> scoreList) {
+    // Constructor to initialize with a list of scores and a click listener
+    public ScoreAdapter(List<ScoreEntry> scoreList, OnScoreClickListener onScoreClickListener) {
         this.scoreList = scoreList;
+        this.onScoreClickListener = onScoreClickListener;
     }
 
     // ViewHolder class to hold references to views
     public static class ScoreViewHolder extends RecyclerView.ViewHolder {
         public TextView dateTextView;
         public TextView scoreTextView;
-        public TextView latitudeTextView;
-        public TextView longitudeTextView;
 
         public ScoreViewHolder(View itemView) {
             super(itemView);
             dateTextView = itemView.findViewById(R.id.dateTextView);
             scoreTextView = itemView.findViewById(R.id.scoreTextView);
-            latitudeTextView = itemView.findViewById(R.id.latitudeTextView);
-            longitudeTextView = itemView.findViewById(R.id.longitudeTextView);
         }
     }
 
@@ -47,17 +46,28 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         // Bind data to views based on position
         ScoreEntry score = scoreList.get(position);
-        holder.dateTextView.setText(score.getDate().toString());
+        holder.dateTextView.setText(dateFormat.format(score.getDate()));
         holder.scoreTextView.setText(String.valueOf(score.getScore()));
-        holder.latitudeTextView.setText(String.valueOf(score.getLatitude()));
-        holder.longitudeTextView.setText(String.valueOf(score.getLongitude()));
+
+        // Set click listener for item
+        holder.itemView.setOnClickListener(v -> {
+            if (onScoreClickListener != null) {
+                onScoreClickListener.onScoreClick(score.getLatitude(), score.getLongitude());
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         // Return the size of the dataset (number of items to display)
         return scoreList.size();
+    }
+
+    // Define an interface for handling score clicks
+    public interface OnScoreClickListener {
+        void onScoreClick(double latitude, double longitude);
     }
 }

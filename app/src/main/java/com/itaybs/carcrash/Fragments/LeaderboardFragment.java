@@ -45,20 +45,30 @@ public class LeaderboardFragment extends Fragment {
 
         // If no scores are stored, populate with sample data
         if (scoreList.isEmpty()) {
-            scoreList.add(new ScoreEntry(new Date(), 500));
-            scoreList.add(new ScoreEntry(new Date(), 300));
+            ScoreEntry score1 = new ScoreEntry(new Date(), 500);
+            score1.setLatitude(31.4117257);
+            score1.setLongitude(35.0818155);
+            scoreList.add(score1);
         }
 
         // Create and set adapter
-        adapter = new ScoreAdapter(scoreList);
+        adapter = new ScoreAdapter(scoreList, (latitude, longitude) -> {
+            // Notify the activity about the score click
+            if (getActivity() instanceof ScoreAdapter.OnScoreClickListener) {
+                ((ScoreAdapter.OnScoreClickListener) getActivity()).onScoreClick(latitude, longitude);
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
 
         return view;
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
+    // Method to set the adapter for RecyclerView
+    public void setScoreAdapter(ScoreAdapter adapter) {
+        this.adapter = adapter;
+        if (recyclerView != null) {
+            recyclerView.setAdapter(adapter);
+        }
     }
 }

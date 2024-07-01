@@ -1,36 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LeaderboardActivity">
 
-    <!-- NestedScrollView to allow scrolling with fragments -->
-    <androidx.core.widget.NestedScrollView
+    <FrameLayout
+        android:id="@+id/leaderboardContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_weight="1" />
 
-        <!-- LinearLayout as the root for fragments -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- Fragment container for Leaderboard -->
-            <FrameLayout
-                android:id="@+id/leaderboardContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!-- Fragment container for Map -->
-            <FrameLayout
-                android:id="@+id/mapContainer"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <FrameLayout
+        android:id="@+id/mapContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+</LinearLayout>
