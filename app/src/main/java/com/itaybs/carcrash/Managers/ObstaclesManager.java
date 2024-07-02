@@ -5,20 +5,21 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.view.View;
 
+import com.itaybs.carcrash.Enums.Obstacle;
 import com.itaybs.carcrash.R;
 
 import java.util.Arrays;
 import java.util.Random;
 
 public class ObstaclesManager {
-    private final int[][] obstacles;
+    private final Obstacle[][] obstacles;
     private final int columnWidth;
     private final int rowHeight;
     private final int rowLastIndex;
     private final int colLastIndex;
     private final Random rand;
 
-    public ObstaclesManager(int[][] obstacles, int columnWidth, int rowHeight, int rowLastIndex, int colLastIndex) {
+    public ObstaclesManager(Obstacle[][] obstacles, int columnWidth, int rowHeight, int rowLastIndex, int colLastIndex) {
         this.obstacles = obstacles;
         this.columnWidth = columnWidth;
         this.rowHeight = rowHeight;
@@ -39,12 +40,12 @@ public class ObstaclesManager {
 
         // Clear the top row
         for (int i = 0; i < cols; i++) {
-            obstacles[0][i] = 0;
+            obstacles[0][i] = Obstacle.EMPTY;
         }
 
         // Place a new obstacle
         int obstacleColumn = rand.nextInt(cols);
-        obstacles[0][obstacleColumn] = 1;
+        obstacles[0][obstacleColumn] = Obstacle.OBSTACLE;
 
         // Randomize the placement of a coin
         if (rand.nextFloat() < 0.2) { // 20% chance to place a coin
@@ -52,7 +53,7 @@ public class ObstaclesManager {
             do {
                 coinColumn = rand.nextInt(cols);
             } while (coinColumn == obstacleColumn); // Ensure coin doesn't overlap with obstacle
-            obstacles[0][coinColumn] = 2;
+            obstacles[0][coinColumn] = Obstacle.EMPTY;
         }
     }
 
@@ -67,11 +68,11 @@ public class ObstaclesManager {
                 params.columnSpec = GridLayout.spec(col);
                 params.rowSpec = GridLayout.spec(row);
 
-                if (obstacles[row][col] == 1) {
+                if (obstacles[row][col] == Obstacle.OBSTACLE) {
                     ImageView obstacle = new ImageView(context);
                     obstacle.setImageResource(R.drawable.obstacle); // Set obstacle image
                     gridLayout.addView(obstacle, params);
-                } else if (obstacles[row][col] == 2) {
+                } else if (obstacles[row][col] == Obstacle.COIN) {
                     ImageView obstacle = new ImageView(context);
                     obstacle.setImageResource(R.drawable.coin); // Set obstacle image
                     gridLayout.addView(obstacle, params);
@@ -84,20 +85,20 @@ public class ObstaclesManager {
     }
 
     public boolean checkCollision(int row, int col) {
-        return obstacles[row][col] == 1;
+        return obstacles[row][col] == Obstacle.OBSTACLE;
     }
 
     public boolean checkCoinCollision(int row, int col) {
-        return obstacles[row][col] == 2;
+        return obstacles[row][col] == Obstacle.COIN;
     }
 
     public void resetObstacle(int row, int col) {
-        obstacles[row][col] = 0;
+        obstacles[row][col] = Obstacle.EMPTY;
     }
 
     public void reset() {
         for (int i = 0; i <= rowLastIndex; i++) {
-            Arrays.fill(obstacles[i], 0);
+            Arrays.fill(obstacles[i], Obstacle.EMPTY);
         }
     }
 }

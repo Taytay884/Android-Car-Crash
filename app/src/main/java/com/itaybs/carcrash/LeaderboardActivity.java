@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.itaybs.carcrash.Fragments.LeaderboardFragment;
 import com.itaybs.carcrash.Fragments.MapFragment;
 import com.itaybs.carcrash.Utilities.ScoreAdapter;
-import com.itaybs.carcrash.Utilities.ScoreEntry;
+import com.itaybs.carcrash.Models.ScoreEntry;
 
 import java.util.List;
 

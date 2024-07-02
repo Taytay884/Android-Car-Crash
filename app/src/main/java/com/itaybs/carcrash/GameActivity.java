@@ -11,6 +11,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.itaybs.carcrash.Enums.GameMode;
+import com.itaybs.carcrash.Enums.Obstacle;
 import com.itaybs.carcrash.Managers.CarManager;
 import com.itaybs.carcrash.Managers.GameManager;
 import com.itaybs.carcrash.Managers.ObstaclesManager;
@@ -22,7 +23,7 @@ public class GameActivity extends AppCompatActivity {
     private GameScoreManager gameScoreManager;
     private final int OBSTACLES_ROWS = 9;
     private final int OBSTACLES_COLUMNS = 5;
-    private final int[][] obstacles = new int[OBSTACLES_ROWS][OBSTACLES_COLUMNS];
+    private final Obstacle[][] obstacles = new Obstacle[OBSTACLES_ROWS][OBSTACLES_COLUMNS];
     private final int columnWidth = obstacles[0].length;
     private final int colLastIndex = obstacles[0].length - 1;
 
@@ -39,7 +40,7 @@ public class GameActivity extends AppCompatActivity {
         MaterialTextView scoreTextView = findViewById(R.id.score);
 
         ImageView car = new ImageView(this);
-        car.setImageResource(R.drawable.car); // Set car image
+        car.setImageResource(R.drawable.car);
 
         int rowLastIndex = OBSTACLES_ROWS - 1;
         int rowHeight = OBSTACLES_ROWS + 1;

@@ -18,24 +18,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-
-        // Define a task to generate secrets.xml
-        tasks.register('generateSecrets') {
-            doLast {
-                def secretsFile = file("src/main/res/values/secrets.xml")
-                def apiKey = project.hasProperty('GOOGLE_MAPS_API_KEY') ? project.property('GOOGLE_MAPS_API_KEY') : ""
-                System.out.println("APIKEY:" + apiKey)
-                def xmlContent = """<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="google_maps_api_key">${apiKey}</string>
-</resources>
-"""
-                secretsFile.text = xmlContent
-            }
-        }
-
-        // Ensure the task runs before the build
-        preBuild.dependsOn generateSecrets
     }
 
     buildTypes {

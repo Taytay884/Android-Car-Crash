@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.itaybs.carcrash.Models.ScoreEntry;
 import com.itaybs.carcrash.R;
 
 import java.text.SimpleDateFormat;

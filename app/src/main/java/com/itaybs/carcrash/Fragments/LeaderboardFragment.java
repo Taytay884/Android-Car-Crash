@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.itaybs.carcrash.Managers.ScoreManager;
 import com.itaybs.carcrash.R;
 import com.itaybs.carcrash.Utilities.ScoreAdapter;
-import com.itaybs.carcrash.Utilities.ScoreEntry;
+import com.itaybs.carcrash.Models.ScoreEntry;
 
 import java.util.Comparator;
 import java.util.Date;

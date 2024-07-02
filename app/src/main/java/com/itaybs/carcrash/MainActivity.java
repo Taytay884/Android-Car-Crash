@@ -14,7 +14,7 @@ import com.google.android.material.textview.MaterialTextView;
 import com.itaybs.carcrash.Enums.GameMode;
 import com.itaybs.carcrash.Managers.ScoreManager;
 import com.itaybs.carcrash.Managers.LocationManager;
-import com.itaybs.carcrash.Utilities.ScoreEntry;
+import com.itaybs.carcrash.Models.ScoreEntry;
 
 import java.util.Date;
 

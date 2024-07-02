@@ -1,4 +1,4 @@
-package com.itaybs.carcrash.Utilities;
+package com.itaybs.carcrash.Models;
 
 import java.util.Date;
 

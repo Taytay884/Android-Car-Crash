@@ -155,7 +155,7 @@ public class GameManager {
                     drawCarAndObstacles();
                     checkCollision();
                     checkCoinPickup();
-                    gameScoreManager.addScore(1); // Increment score as an example
+                    gameScoreManager.addScore(1);
                     if (updatedDelay != delay) {
                         delay = updatedDelay;
                         updateGameTimer();
