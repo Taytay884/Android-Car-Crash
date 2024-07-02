@@ -76,8 +76,7 @@ public class GameManager {
 
     public void initializeGame() {
         updateHearts();
-        obstaclesManager.initializeObstacles(gridLayout, context);
-        carManager.updateCarPosition(gridLayout, context);
+        drawCarAndObstacles();
         gameScoreManager.resetScore();
         startGameTimer();
     }
@@ -111,6 +110,7 @@ public class GameManager {
         }
         carManager.updateCarPosition(gridLayout, context);
         checkCollision();
+        checkCoinPickup();
     }
 
     public void resumeGame() {
@@ -152,9 +152,9 @@ public class GameManager {
             public void run() {
                 ((GameActivity) context).runOnUiThread(() -> {
                     obstaclesManager.updateObstaclesMatrix();
-                    obstaclesManager.initializeObstacles(gridLayout, context);
-                    carManager.updateCarPosition(gridLayout, context);
+                    drawCarAndObstacles();
                     checkCollision();
+                    checkCoinPickup();
                     gameScoreManager.addScore(1); // Increment score as an example
                     if (updatedDelay != delay) {
                         delay = updatedDelay;
@@ -188,6 +188,21 @@ public class GameManager {
             carManager.resetCarPosition();
             obstaclesManager.reset();
         }
+    }
+
+    public void checkCoinPickup() {
+        int row = carManager.getCurrentRow();
+        int col = carManager.getCurrentLane();
+        if (obstaclesManager.checkCoinCollision(row, col)) {
+            gameScoreManager.addScore(5);
+            obstaclesManager.resetObstacle(row, col);
+            drawCarAndObstacles();
+        }
+    }
+
+    private void drawCarAndObstacles() {
+        obstaclesManager.initializeObstacles(gridLayout, context);
+        carManager.updateCarPosition(gridLayout, context);
     }
 
     private void toastAndVibrate(String text) {
